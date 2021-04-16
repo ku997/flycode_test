@@ -1,0 +1,50 @@
+$lightGrey: rgba(128, 128, 128, 0.3);
+$transition: 0.3s ease;
+
+@mixin linkUnderline {
+  &::before {
+    position: absolute;
+    content: "";
+    width: 0%;
+    opacity: 0;
+    bottom: -5px;
+    height: 2px;
+    background-color: $lightGrey;
+    transition: 0.3s ease;
+  }
+  &--active {
+    cursor: default;
+    pointer-events: none;
+  }
+  &:hover,
+  &--active {
+    &::before {
+      opacity: 1;
+      width: 100%;
+    }
+  }
+}
+
+@mixin defaultButton {
+  cursor: pointer;
+  padding: 10px;
+  border: 1px solid $lightGrey;
+  border-radius: 4px;
+  background-color: $lightGrey;
+  transition: background-color $transition;
+  &:hover {
+    background-color: #fff;
+  }
+}
+
+@mixin defaultInput {
+  margin-bottom: 20px;
+  border: 1px solid #000;
+  padding: 0 10px;
+  line-height: 25px;
+  border-radius: 4px;
+  transition: border $transition;
+  &:focus{
+      border-color: $lightGrey; 
+  }
+}

@@ -1,0 +1,42 @@
+@import '../../styles/theme.scss';
+
+.singlepost{
+    margin-bottom: 0;
+    border-bottom: none;
+    &__email{
+        margin-top: 15px;
+    }
+    &__title{
+        cursor: pointer;
+        display: inline-block;
+        position: relative;
+        &::before{
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -5px;
+            height: 2px;
+            width: 100%;
+            transform: scaleX(0);
+            overflow: hidden;
+            transition: .3s ease;
+            background-color: #000000;
+        }
+        &:hover{
+            &::before{
+                transform: scaleX(1);
+            }
+        }
+    }
+    &__text{
+        margin-bottom: 30px;
+    }
+    
+    &__edit,
+    &__delete{
+        @include defaultButton
+    }
+    &__edit{
+        margin-right: 10px;
+    }
+}
