@@ -18,8 +18,7 @@
         width: 50%;
     }
     &__error{
-        color: red;
-        margin-bottom: 20px;
+        border-color: red !important;
         
     }
 }

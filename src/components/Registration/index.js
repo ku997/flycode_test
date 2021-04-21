@@ -1,95 +1,76 @@
-import { Component } from 'react';
-import './style.scss';
-import Modal from '../Modal/index'
-import { registration } from '../../queries/index'
+import { useState } from "react";
+import "./style.scss";
+import Modal from "../Modal/index";
+import { registration } from "../../queries/index";
+import { useForm } from "react-hook-form";
 
-class Registration extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            email: '',
-            password: '',
-            passwordRepeat: '',
-            error: '',
-            message: '',
-            isShowModal: false
+function Registration() {
+  const [message, setMessage] = useState("");
+  const [isShowModal, setIsShowModal] = useState("");
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+  const onSubmit = data => {
+    Promise.resolve(registration(data.email, data.password))
+      .then(() => {
+        setMessage("Регистрация прошла успешно");
+      })
+      .catch(() => {
+        setMessage("Ошибка! Введите пользователя из reqres.in API");
+      })
+      .finally(() => {
+        toggleModal();
+      });
+  };
 
-        }
-        this.registrationSubmit = this.registrationSubmit.bind(this);
-        this.toggleModal = this.toggleModal.bind(this);
-        this.registrationSubmit = this.registrationSubmit.bind(this);
-        this.validate = this.validate.bind(this);
-    }
-    validate() {
-        let error = '';
-        if (this.state.email.trim() < 1) {
-            error = 'Введите email';
-        } else if (this.state.password.trim() < 1) {
-            error = 'Введите пароль'
-        } else if (this.state.password !== this.state.passwordRepeat) {
-            error = 'Пароли должны совпадать';
-        } else {
-            error = '';
-        }
-        this.setState({
-            error
-        })
-        return error;
-    }
-    handleInputChange(field, el) {
-        this.setState({
-            [field]: el.target.value,
-        });
-    }
-    toggleModal() {
-        this.setState({
-            isShowModal: !this.state.isShowModal
-        })
-    }
-    registrationSubmit(event) {
-        event.preventDefault();
-        if (this.validate() === '') {
-            Promise.resolve(registration(this.state.email, this.state.password))
-                .then(() => {
-                    this.setState({
-                        message: 'Регистрация прошла успешно'
-                    })
-                })
-                .catch(() => {
-                    this.setState({
-                        message: 'Ошибка! Введите пользователя из reqres.in API'
-                    })
-                })
-                .finally(() => {
-                    this.setState({
-                        email: '',
-                        password: '',
-                        passwordRepeat: '',
-                    })
-                    this.toggleModal()
-                })
-        }
+  function toggleModal() {
+    setIsShowModal(!isShowModal);
+  }
+  return (
+    <div className="container">
+      <form className="registration" onSubmit={handleSubmit(onSubmit)}>
+        <h1 className="registration__title">Регистрация</h1>
+        <input
+          type="email"
+          placeholder="email"
+          id="email"
+          className={`registration__email ${
+            errors.email ? "registration__error" : ""
+          }`}
+          {...register("email", { required: true, min: 3 })}
+        />
+        <input
+          type="password"
+          className={`registration__password ${
+            errors.password ? "registration__error" : ""
+          }`}
+          placeholder="Пароль"
+          id="password"
+          {...register("password", { required: true, min: 6 })}
+        />
+        <input
+          type="password"
+          className={`registration__password-repeat ${
+            errors.password_repeat ? "registration__error" : ""
+          }`}
+          placeholder="Повторите пароль"
+          id="passwordRepeat"
+          {...register("password_repeat", { required: true, min: 6 })}
+        />
 
-    }
-    render() {
-        return (
-            <div className="container">
-                <form className="registration">
-                    <h1 className='registration__title'>Регистрация</h1>
-                    <input value={this.state.email} placeholder='email' onChange={this.handleInputChange.bind(this, 'email')} className='registration__email' type="email" />
-                    <input value={this.state.password} placeholder='Пароль' onChange={this.handleInputChange.bind(this, 'password')} className='registration__password' type="password" name="" id="password" />
-                    <input value={this.state.passwordRepeat} placeholder='Повторите пароль' onChange={this.handleInputChange.bind(this, 'passwordRepeat')} className='registration__password-repeat' type="password" name="" id="passwordRepeat" />
-                    <p className='registration__error'>{this.state.error}</p>
-                    <button onClick={this.registrationSubmit} className='registration__submit'>Ок</button>
-                </form>
-                {this.state.isShowModal && <Modal modalCloseFoo={this.toggleModal}>
-                    <div className="registration-message">
-                        <p>{this.state.message}</p>
-                    </div>
-                </Modal>}
-            </div>
-
-        );
-    }
+        <input type="submit" className="registration__submit" />
+      </form>
+      {isShowModal && (
+        <Modal modalCloseFoo={toggleModal}>
+          <div className="registration-message">
+            <p>{message}</p>
+          </div>
+        </Modal>
+      )}
+    </div>
+  );
 }
+
 export default Registration;

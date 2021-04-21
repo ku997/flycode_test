@@ -18,7 +18,7 @@ module.exports = {
   rules: {
     "react/jsx-uses-react": 2,
     "react/jsx-uses-vars": 2,
-    "no-unused-vars": ["error", { "vars": "all", "args": "none", "ignoreRestSiblings": false }],
+    "no-unused-vars": 'off',
     "no-debugger" : "warn"
   },
 };

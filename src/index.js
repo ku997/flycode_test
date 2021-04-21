@@ -8,19 +8,14 @@ import App from './containers/App/index.js';
 import { rootReducer } from './reducers/rootReducer';
 
 
-const persistedState = localStorage.getItem('reduxState')
-  ? JSON.parse(localStorage.getItem('reduxState'))
-  : {}
 
-const store = createStore(rootReducer, persistedState, compose(
+const store = createStore(rootReducer, compose(
   applyMiddleware(
     thunk
   ),
   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 ));
-store.subscribe(() => {
-  localStorage.setItem('reduxState', JSON.stringify(store.getState()))
-})
+
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
