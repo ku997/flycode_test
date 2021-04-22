@@ -3,19 +3,28 @@ import "./style.scss";
 import Modal from "../Modal/index";
 import { registration } from "../../queries/index";
 import { useForm } from "react-hook-form";
+import { useCookies } from "react-cookie";
+import { useHistory } from "react-router-dom";
 
 function Registration() {
   const [message, setMessage] = useState("");
   const [isShowModal, setIsShowModal] = useState("");
+  const [cookies, setCookie] = useCookies();
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
+  let history = useHistory();
   const onSubmit = data => {
     Promise.resolve(registration(data.email, data.password))
-      .then(() => {
+      .then(response => {
         setMessage("Регистрация прошла успешно");
+        setCookie("token", response.data.token, { path: "/" });
+        setCookie("userId", "1", { path: "/" });
+        setTimeout(() => {
+          history.push("/posts");
+        }, 1500);
       })
       .catch(() => {
         setMessage("Ошибка! Введите пользователя из reqres.in API");
@@ -60,7 +69,11 @@ function Registration() {
           {...register("password_repeat", { required: true, min: 6 })}
         />
 
-        <input type="submit" className="registration__submit" />
+        <input
+          value="Зарегистрироваться"
+          type="submit"
+          className="registration__submit"
+        />
       </form>
       {isShowModal && (
         <Modal modalCloseFoo={toggleModal}>

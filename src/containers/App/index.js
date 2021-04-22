@@ -10,21 +10,24 @@ import Registration from "../../components/Registration";
 import Login from "../../components/Login";
 import Header from "../../components/Header";
 import Posts from "../../containers/Posts";
+import Users from "../../containers/Users";
 import SinglePost from "../../containers/SinglePost";
 import EditPost from "../EditPost";
 import CreatePost from "../CreatePost";
+import { useCookies } from 'react-cookie';
 
-class App extends Component {
-  render() {
+function App () {
+  const [cookies] = useCookies(['token']);
+  const accessToken = cookies.token;
     return (
       <Router>
-        <Header />
+        <Header accessToken = {accessToken} />
         <Switch>
           <Route
             exact
             path="/registration"
             component={() =>
-              this.props.accessToken ? (
+              accessToken ? (
                 <Redirect to="/posts" />
               ) : (
                 <Registration />
@@ -35,35 +38,30 @@ class App extends Component {
             exact
             path="/login"
             component={() =>
-              this.props.accessToken ? <Redirect to="/posts" /> : <Login />
+              accessToken ? <Redirect to="/posts" /> : <Login />
             }
           />
           <Route exact path="/posts" component={Posts} />
+          <Route exact path="/users" component={Users} />
           <Route exact path="/" component={() => <Redirect to="/posts" />} />
           <Route exact path="/posts/:id" component={SinglePost} />
           <Route
             exact
             path="/posts/:id/edit"
             component={() =>
-              !this.props.accessToken ? <Redirect to="/login" /> : <EditPost />
+              !accessToken ? <Redirect to="/login" /> : <EditPost />
             }
           />
           <Route
             exact
             path="/create_post"
             component={() =>
-              !this.props.accessToken ? <Redirect to="/login" /> : <CreatePost />
+              !accessToken ? <Redirect to="/login" /> : <CreatePost />
             }
           />
         </Switch>
       </Router>
     );
   }
-}
 
-function mapStateToProps(state) {
-  return {
-    accessToken: state.authUser.token,
-  };
-}
-export default connect(mapStateToProps, null)(App);
+export default App;

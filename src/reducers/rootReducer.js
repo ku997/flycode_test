@@ -1,9 +1,9 @@
 import { combineReducers } from "redux";
-import {loginUser} from './user/loginUser'
+import { getUsers } from "./user/getUsers";
 import { getPosts } from "./posts/getPosts";
-import { getPagState} from './pagination/getPagState'
+import { getPagState } from "./pagination/getPagState";
 export const rootReducer = combineReducers({
-    authUser: loginUser,
-    posts: getPosts,
-    pagState: getPagState
+  users: getUsers,
+  posts: getPosts,
+  pagState: getPagState,
 });

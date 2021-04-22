@@ -1,3 +1,4 @@
+@import 'antd/dist/antd.css';
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans",
@@ -60,11 +61,16 @@ input[type="search"]::-webkit-search-results-button,
 input[type="search"]::-webkit-search-results-decoration {
   display: none;
 }
-
+a {
+  color: #000;
+}
 a {
   text-decoration: none;
   color: inherit;
   cursor: pointer;
+  &:hover{
+    color: #000;
+  }
 }
 
 p {
@@ -92,6 +98,7 @@ body {
   position: relative;
   overflow-x: hidden;
   max-width: 100%;
+  line-height: unset;
 }
 
 img {

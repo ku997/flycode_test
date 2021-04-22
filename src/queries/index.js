@@ -18,11 +18,19 @@ export function login(email, password) {
     data: { email, password },
   });
 }
+export function getUsersQuery() {
+  return axios.request({
+    url: "/users",
+    method: "GET",
+    baseURL: "https://jsonplaceholder.typicode.com",
+    responseType: "json",
+  });
+}
 export function getPostsQuery() {
   return axios.request({
     url: '/posts',
     method: "GET",
-    baseURL: "https://jsonplaceholder.typicode.com/",
+    baseURL: "https://jsonplaceholder.typicode.com",
     responseType: "json",
   });
 }

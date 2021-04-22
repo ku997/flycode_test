@@ -1,37 +1,37 @@
-@import '../../styles/theme.scss';
+@import "../../styles/theme.scss";
 
 .login {
-    display: flex;
-    flex-direction: column;
-    min-width: 290px;
-    max-width: 450px;
-    &__email, 
-    &__password, 
-    &__password-repeat {
-        @include defaultInput;
-    }
-    &__password-repeat {
-        margin-bottom: 10px;
-    }
-    &__submit{
-        @include defaultButton;
-        width: 50%;
-    }
-    &__error{
-        color: red;
-        margin-bottom: 20px;
-        
-    }
+  display: flex;
+  flex-direction: column;
+  min-width: 290px;
+  max-width: 450px;
+  &__email,
+  &__password {
+    @include defaultInput;
+    &:invalid {
+        border-color: red !important;
+      }
+  }
+  &__password-repeat {
+    margin-bottom: 10px;
+  }
+  &__submit {
+    @include defaultButton;
+    width: 50%;
+  }
+  &__error {
+    border-color: red !important;
+  }
 }
-.login-message{
-    padding: 15px;
-    width: 250px;
-    display: flex;
-    margin: 0 auto;
-    align-items: center;
-    justify-content: center;
-    height: 150px;
-    background-color: #fff;
-    border-radius: 4px;
-    text-align: center;
+.login-message {
+  padding: 15px;
+  width: 250px;
+  display: flex;
+  margin: 0 auto;
+  align-items: center;
+  justify-content: center;
+  height: 150px;
+  background-color: #fff;
+  border-radius: 4px;
+  text-align: center;
 }

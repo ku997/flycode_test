@@ -4,15 +4,19 @@ import { Link, withRouter } from "react-router-dom";
 import "./style.scss";
 import { getPostById } from "../../actions/posts/getPostById";
 import { deletePost } from "../../actions/posts/deletePost";
-import { deletePostQuery } from '../../queries'
+import { deletePostQuery } from "../../queries";
 import Preloader from "../../components/Preloader/index";
 import { getCurrentPostId } from "../../actions/posts/getCurrentPost";
-import { filter } from 'lodash'
+import { filter } from "lodash";
+import { withCookies } from "react-cookie";
 class SinglePost extends Component {
   constructor(props) {
     super(props);
+    const { cookies } = props;
     this.state = {
-      currentPost: null
+      currentPost: null,
+      name: cookies.get("token") || "",
+      userId: cookies.get('userId') || -1
     };
     this.onDelete = this.onDelete.bind(this);
   }
@@ -20,7 +24,7 @@ class SinglePost extends Component {
   onDelete() {
     deletePostQuery(this.props.match.params.id);
     this.props.deletePost(this.props.match.params.id);
-    this.props.history.replace('/posts');
+    this.props.history.replace("/posts");
   }
   componentDidMount() {
     const POST_ID = this.props.match.params.id;
@@ -41,18 +45,29 @@ class SinglePost extends Component {
           {this.props.currentPost.title}
         </h2>
         <p className="singlepost__text">{this.props.currentPost.body}</p>
-        {this.props.accessToken && this.props.currentPost.userId == this.props.userId && <div className="singlepost__buttons">
-        <Link className="singlepost__edit" to = {`${this.props.match.params.id}/edit`}>Редактировать</Link>
-          <button className='singlepost__delete' onClick={this.onDelete}>Удалить</button>
-        </div>}
+        {this.state.token != '' &&
+          this.props.currentPost.userId == this.state.userId && (
+            <div className="singlepost__buttons">
+              <Link
+                className="singlepost__edit"
+                to={`${this.props.match.params.id}/edit`}>
+                Редактировать
+              </Link>
+              <button className="singlepost__delete" onClick={this.onDelete}>
+                Удалить
+              </button>
+            </div>
+          )}
       </div>
     );
   }
 }
 function mapStateToProps(state) {
-  let currentPost = filter(state.posts.loadedPosts, elem => elem.id == state.posts.currentPost)[0];
+  let currentPost = filter(
+    state.posts.loadedPosts,
+    elem => elem.id == state.posts.currentPost
+  )[0];
   return {
-    accessToken: state.authUser.token,
     userId: state.authUser.id,
     posts: state.posts.loadedPosts,
     postsStatus: state.posts.status,
@@ -64,8 +79,8 @@ function mapStateToProps(state) {
 const mapDispathToProps = {
   getPostById,
   getCurrentPostId,
-  deletePost
+  deletePost,
 };
-export default withRouter(
-  connect(mapStateToProps, mapDispathToProps)(SinglePost)
+export default withCookies(
+  withRouter(connect(mapStateToProps, mapDispathToProps)(SinglePost))
 );

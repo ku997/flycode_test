@@ -42,13 +42,8 @@ class CreatePost extends Component {
         );
     }
 }
-function mapStateToProps(state) {
-    return {
-        accessToken: state.authUser.token,
-        userId: state.authUser.id,
-    };
-}
+
 const mapDispathToProps = {
     createPost
 };
-export default withRouter(connect(mapStateToProps, mapDispathToProps)(CreatePost));
+export default withRouter(connect(null, mapDispathToProps)(CreatePost));

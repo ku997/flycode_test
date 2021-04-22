@@ -1,6 +1,9 @@
 export const READY = 'ready';
 export const LOADING = 'loading';
 export const ERROR = 'error';
+export const CREATE_USERS = 'create_users';
+export const CREATE_USERS_SUCCSESS = 'create_users_succsess';
+export const CREATE_USERS_ERROR = 'create_users_error';
 export const LOGIN = 'login';
 export const LOGIN_SUCCSESS = 'login_succsess';
 export const LOGIN_ERROR = 'login_error';
