@@ -1,70 +1,28 @@
-const axios = require("axios");
+import reqresApi from '../reqresApi'
+import jsonplaceholderApi from '../jsonplaceholderApi'
 
-export function registration(email, password) {
-  return axios.request({
-    url: '/register',
-    method: "POST",
-    baseURL: "https://reqres.in/api/",
-    responseType: "json",
-    data: { email, password },
-  });
+export function registration (email, password) {
+  return reqresApi.post('/register', { email, password })
 }
-export function login(email, password) {
-  return axios.request({
-    url: '/login',
-    method: "POST",
-    baseURL: "https://reqres.in/api/",
-    responseType: "json",
-    data: { email, password },
-  });
+export function login (email, password) {
+  return reqresApi.post('/login', { email, password })
 }
-export function getUsersQuery() {
-  return axios.request({
-    url: "/users",
-    method: "GET",
-    baseURL: "https://jsonplaceholder.typicode.com",
-    responseType: "json",
-  });
+export function getUsersQuery (page) {
+  return reqresApi.get(`/users?page=${page}`)
 }
+
 export function getPostsQuery() {
-  return axios.request({
-    url: '/posts',
-    method: "GET",
-    baseURL: "https://jsonplaceholder.typicode.com",
-    responseType: "json",
-  });
+  return jsonplaceholderApi.get('/posts')
 }
 export function getSinglePostsQuery(postId) {
-  return axios.request({
-    url: `/posts/${postId}`,
-    method: "GET",
-    baseURL: "https://jsonplaceholder.typicode.com/",
-    responseType: "json",
-  });
+  return jsonplaceholderApi.get(`/posts/${postId}`)
 }
 export function editPostQuery (postId, title, body) {
-  return axios.request({
-    url: `/posts/${postId}`,
-    method: "PATCH",
-    baseURL: "https://jsonplaceholder.typicode.com/",
-    responseType: "json",
-    data: {title, body}
-  });
+  return jsonplaceholderApi.patch(`/posts/${postId}`, {title, body})
 }
 export function deletePostQuery (postId) {
-  return axios.request({
-    url: `/posts/${postId}`,
-    method: "delete",
-    baseURL: "https://jsonplaceholder.typicode.com/",
-    responseType: "json",
-  });
+  return jsonplaceholderApi.delete(`/posts/${postId}`)
 }
 export function createPostQuery (userId, title, body) {
-  return axios.request({
-    url: `/posts`,
-    method: "POST",
-    baseURL: "https://jsonplaceholder.typicode.com/",
-    responseType: "json",
-    data: {userId, title, body}
-  });
+  return jsonplaceholderApi.post('/posts', {userId, title, body})
 }

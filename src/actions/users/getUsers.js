@@ -4,33 +4,30 @@ import {
   CREATE_USERS_ERROR,
 } from "../../constants/actionTypes";
 import { getUsersQuery } from "../../queries";
-import { assign } from "lodash";
+import { map, assign } from "lodash";
 
-export function getUsers() {
-  return (dispatch, getState) => {
-    let users = assign([], getState().users.loadedUsers);
+export function getUsers(page) {
+  return dispatch => {
     dispatch({
       type: CREATE_USERS,
     });
-    if (getState().users.loadedUsers.length === 0) {
-      Promise.resolve(getUsersQuery())
-        .then(value => {
-          dispatch({
-            type: CREATE_USERS_SUCCSESS,
-            payload: value.data,
-          });
-        })
-        .catch(error => {
-          console.warn("Загрузка постов не удалась. " + error);
-          dispatch({
-            type: CREATE_USERS_ERROR,
-          });
+    Promise.resolve(getUsersQuery(page))
+      .then(value => {
+        let data = map(value.data.data, user => {
+          user.key = user.id;
+          return user;
         });
-    } else {
-      dispatch({
-        type: CREATE_USERS_SUCCSESS,
-        payload: users,
+        let response = assign(value.data, { data });
+        dispatch({
+          type: CREATE_USERS_SUCCSESS,
+          payload: response,
+        });
+      })
+      .catch(error => {
+        console.warn("Загрузка постов не удалась. " + error);
+        dispatch({
+          type: CREATE_USERS_ERROR,
+        });
       });
-    }
   };
 }
